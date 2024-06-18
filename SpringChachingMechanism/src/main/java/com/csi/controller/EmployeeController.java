@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -63,6 +65,22 @@ public class EmployeeController {
     public ResponseEntity<String> deleteById(@PathVariable int empId){
         employeeServiceImpl.deleteById(empId);
         return ResponseEntity.ok("Data Deleted Sucessfully....");
+    }
+    
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<String> deleteAll(){
+        employeeServiceImpl.deleteAll();
+        return ResponseEntity.ok("All Data Deleted Succefully");
+    }
+
+    @GetMapping("/findbyanyinput/{input}")
+    public ResponseEntity<List<Employee>> findByAnyInput(@PathVariable String anyInput){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        return ResponseEntity.ok(employeeServiceImpl.findAll().stream()
+                .filter(emp -> dateFormat.format(emp.getEmpDOB()).equals(anyInput)
+                        || String.valueOf(emp.getEmpId()).equals(anyInput) || emp.getEmpName().equals(anyInput)
+                        || emp.getEmpEmailId().equals(anyInput)
+                        || String.valueOf(emp.getEmpContact()).equals(anyInput)).collect(Collectors.toList()));
     }
 
 }

@@ -57,4 +57,6 @@ public class EmployeeService {
     public void deleteById(int empId){
          employeeRepoImpl.deleteById(empId);
     }
+
+    public void deleteAll(){employeeRepoImpl.deleteAll();}
 }
